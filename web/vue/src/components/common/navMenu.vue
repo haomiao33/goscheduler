@@ -1,13 +1,17 @@
 <template>
-  <div v-cloak>
+  <div v-cloak style="height: 100%">
     <el-menu
       :default-active="currentRoute"
       mode="horizontal"
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
+      style="height: 100%"
       router>
-      <el-row>
+      <el-row type="flex" align="middle" justify="center">
+        <el-col :span="2" style="" align="middle">
+          <span style="color: paleturquoise; font-size: 2vh;">GoScheduler</span>
+        </el-col>
         <el-col :span="2">
           <el-menu-item index="/task">任务管理</el-menu-item>
         </el-col>
@@ -20,7 +24,7 @@
         <el-col :span="2">
           <el-menu-item v-if="this.$store.getters.user.isAdmin" index="/system">系统管理</el-menu-item>
         </el-col>
-        <el-col :span="16"></el-col>
+        <el-col :span="14"></el-col>
         <el-col :span="2" style="float:right;">
           <el-submenu v-if="this.$store.getters.user.token" index="userStatus">
             <template slot="title">{{this.$store.getters.user.username}}</template>
