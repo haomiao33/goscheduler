@@ -141,6 +141,10 @@ docker run --name goscheduler --link mysql:db -p 5920:5920 -d gaggad/goscheduler
 
 ## ChangeLog
 
+v1.5.5
+--------
+* 优化ui
+
 v1.5.4
 --------
 * HTTP POST 请求支持设置请求体
