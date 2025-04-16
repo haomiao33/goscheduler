@@ -43,13 +43,14 @@ func (migration *Migration) Upgrade(oldVersionId int) {
 		return
 	}
 
-	versionIds := []int{110, 122, 130, 140, 150}
+	versionIds := []int{110, 122, 130, 140, 150, 154}
 	upgradeFuncs := []func(*xorm.Session) error{
 		migration.upgradeFor110,
 		migration.upgradeFor122,
 		migration.upgradeFor130,
 		migration.upgradeFor140,
 		migration.upgradeFor150,
+		migration.upgradeFor154,
 	}
 
 	startIndex := -1
@@ -131,7 +132,7 @@ func (migration *Migration) upgradeFor110(session *xorm.Session) error {
 	// 删除task表host_id字段
 	_, err = session.Exec(fmt.Sprintf("ALTER TABLE %s DROP COLUMN host_id", tableName))
 
-	logger.Info("已升级到v1.1\n")
+	logger.Info("已升级到v1.1")
 
 	return err
 }
@@ -144,7 +145,7 @@ func (migration *Migration) upgradeFor122(session *xorm.Session) error {
 	// task表增加tag字段
 	_, err := session.Exec(fmt.Sprintf("ALTER TABLE %s ADD COLUMN tag VARCHAR(32) NOT NULL DEFAULT '' ", tableName))
 
-	logger.Info("已升级到v1.2.2\n")
+	logger.Info("已升级到v1.2.2")
 
 	return err
 }
@@ -157,7 +158,7 @@ func (migration *Migration) upgradeFor130(session *xorm.Session) error {
 	// 删除user表deleted字段
 	_, err := session.Exec(fmt.Sprintf("ALTER TABLE %s DROP COLUMN deleted", tableName))
 
-	logger.Info("已升级到v1.3\n")
+	logger.Info("已升级到v1.3")
 
 	return err
 }
@@ -178,7 +179,7 @@ func (migration *Migration) upgradeFor140(session *xorm.Session) error {
 		return err
 	}
 
-	logger.Info("已升级到v1.4\n")
+	logger.Info("已升级到v1.4")
 
 	return err
 }
@@ -231,7 +232,23 @@ func (m *Migration) upgradeFor150(session *xorm.Session) error {
 		return err
 	}
 
-	logger.Info("已升级到v1.5\n")
+	logger.Info("已升级到v1.5")
 
+	return nil
+}
+
+// 升级到v1.5.4版本
+func (migration *Migration) upgradeFor154(session *xorm.Session) error {
+	logger.Info("开始升级到v1.5.4")
+
+	tableName := TablePrefix + "task"
+	sql := fmt.Sprintf(
+		"alter table %s add column request_body text after command", tableName)
+	_, err := session.Exec(sql)
+	if err != nil {
+		return err
+	}
+
+	logger.Info("已升级到v1.5.4")
 	return nil
 }

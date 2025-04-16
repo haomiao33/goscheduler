@@ -45,10 +45,6 @@ gocron、goscheduler 使用的都是 MIT LICENSE
 ### 替换可执行文件
 下载新版本的 goscheduler/goscheduler-node，直接替换既可
 
-### 更新数据库
-v1.5.4
---------
-* alter table task add column request_body text after command;
 
 ## 安装
 
@@ -147,7 +143,7 @@ v1.5.5
 
 v1.5.4
 --------
-* HTTP POST 请求支持设置请求体
+* HTTP POST 请求体存储到数据库
 
 v1.5
 --------
