@@ -1,0 +1,60 @@
+name: Build and Package
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        go-version: [ '1.22' ]  # 可根据你项目使用的版本调整
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'  # Vue3 一般推荐 node >=16
+
+      - name: Install frontend dependencies
+        working-directory: web/vue
+        run: yarn install
+
+      - name: Build frontend
+        working-directory: web/vue
+        run: yarn build
+
+      - name: Copy frontend to public
+        run: |
+          mkdir -p web/public
+          cp -r web/vue/dist/* web/public/
+
+      - name: Go mod download
+        run: go mod download
+
+      - name: Build Go binaries
+        run: make build
+
+      - name: Package (linux+windows+mac amd64)
+        run: make package-all
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-packages
+          path: |
+            goscheduler-package/*.tar.gz
+            goscheduler-package/*.zip
