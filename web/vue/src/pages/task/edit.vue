@@ -139,7 +139,7 @@
         <el-row>
           <el-col>
             <el-alert
-              title="任务执行超时强制结束, 取值0-86400(秒), 默认0, 不限制"
+              title="任务执行超时强制结束, 取值0-345600(秒), 默认0, 不限制"
               type="info"
               :closable="false">
             </el-alert>
